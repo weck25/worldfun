@@ -107,7 +107,7 @@ export default function Holders({ param, token }: { param: string | null, token:
             </div>
             {holders && holders.map((holder, index) => (
                 <div className="px-4 py-4 flex items-center justify-between gap-3" key={'holder' + index}>
-                    <a href={`https://solscan.io/address/${holder.holder.wallet}`} className="text-sm lg:text-base font-medium text-body-color !leading-5 xl:!leading-none">
+                    <a href={`https://sepolia.worldscan.org/address/${holder.holder.wallet}`} className="text-sm lg:text-base font-medium text-body-color !leading-5 xl:!leading-none">
                         {index + 1}. <span className="text-yellow hover:underline cursor-pointer">{holder.holder.name} {holder.holder.dev ? '(dev)' : ''} {holder.holder.bondingCurve ? '(bonding curve)' : ''}</span>
                     </a>
                     <p className="text-sm lg:text-base font-medium !leading-5 xl:!leading-none"> {Math.floor(Math.abs((holder.totalAmount / 1_000_000_000) * 10000)) / 100}% </p>
