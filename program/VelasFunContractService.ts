@@ -55,8 +55,8 @@ export const createToken = async (
         const web3 = new Web3(provider);
         const { name, ticker, description, url, twitter, telegram, website } = coin;
 
-        const baseFee = (await web3.eth.getBlock('latest')).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
-        const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
+        const baseFee = (await web3.eth.getBlock('latest')).baseFeePerGas || BigInt(web3.utils.toWei('4', 'gwei'));
+        const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas || BigInt(web3.utils.toWei('4', 'gwei'));
         const metadataURI = await uploadMetadata(coin);
         const creationFee = await contract.methods.CREATION_FEE().call();
 
@@ -105,7 +105,7 @@ export const createToken = async (
 export const buyTokens = async (provider: any, account: string, token: string, amount: string) => {
     try {
         const web3 = new Web3(provider)
-        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
+        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('4', 'gwei'));
         const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
 
         const transaction: {
@@ -147,7 +147,7 @@ export const sellTokens = async (provider: any, account: string, token: string, 
         const tokenAmount = Number(amount) * 1_000_000;
         const approveTransaction = tokenContract.methods.approve(VelasFunContract.address, tokenAmount);
         const approveGas = await approveTransaction.estimateGas({ from: account });
-        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
+        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('4', 'gwei'));
         const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
 
         const approveTransactionData = {
@@ -212,7 +212,7 @@ export const updateConstantVariables = async (
 ) => {
     try {
         const web3 = new Web3(provider);
-        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
+        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('4', 'gwei'));
         const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
 
         const transaction: {
