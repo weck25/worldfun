@@ -108,6 +108,9 @@ export const buyTokens = async (provider: any, account: string, token: string, a
         const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('4', 'gwei'));
         const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
 
+        const amountInWei = web3.utils.toWei(amount, 'ether');
+        const value = web3.utils.toHex(amountInWei);
+
         const transaction: {
             from: string;
             to: string;
@@ -121,8 +124,8 @@ export const buyTokens = async (provider: any, account: string, token: string, a
         } = {
             from: account,
             to: VelasFunContract.address,
-            value: web3.utils.toWei(amount, 'ether'),
-            data: contract.methods.buyTokens(token, web3.utils.toWei(amount, 'ether')).encodeABI(),
+            value,
+            data: contract.methods.buyTokens(token, value).encodeABI(),
             maxFeePerGas: (Number(baseFee) + Number(maxPriorityFeePerGas)).toString(),
             maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
         }
@@ -273,7 +276,59 @@ export const getTokenAmount = async (provider: any ,account: string, token: stri
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const addTokenToMetaMask = async (provider: any, tokenAddress: string) => {
+const addTokenToMetaMask = async (provider: any, tokenAddress: string) => {const addTokenToMetaMask = async (provider: any, tokenAddress: string) => {
+    try {
+        const consent = Cookies.get("CookieConsent");
+
+        if (consent === 'true') {
+            const addedTokens = JSON.parse(localStorage.getItem('addedTokens') || '[]');
+            if (addedTokens.includes(tokenAddress)) {
+                console.log(`${tokenAddress} is already added to MetaMask.`);
+                return;
+            }
+        }
+
+        const web3 = new Web3(provider);
+        const tokenContract = new web3.eth.Contract(MemecoinABI, tokenAddress);
+
+        let tokenURI;
+        if (tokenContract.methods.tokenURI) {
+            tokenURI = (await tokenContract.methods.tokenURI().call()) as string;
+        } else {
+            console.log("Token contract does not have a tokenURI method");
+            // You can either return an error or use a default value for tokenURI
+            return;
+        }
+
+        const options: { symbol: string, image: string } = (await axios.get(tokenURI)).data;
+
+        const success = await provider.request({
+            method: 'wallet_watchAsset',
+            params: {
+                type: 'ERC20',
+                options: {
+                    address: tokenAddress,
+                    symbol: options.symbol,
+                    decimals: 6,
+                    image: options.image
+                },
+            },
+        });
+
+        if (consent === 'true') {
+            const addedTokens = JSON.parse(localStorage.getItem('addedTokens') || '[]');
+
+            if (success) {
+                addedTokens.push(tokenAddress);
+                localStorage.setItem('addedTokens', JSON.stringify(addedTokens));
+            } else {
+                console.log('Failed to add the token to MetaMask.');
+            }
+        }
+    } catch (error) {
+        console.error('Error adding token to MetaMask', error);
+    }
+};
     try {
         const consent = Cookies.get("CookieConsent");
 
