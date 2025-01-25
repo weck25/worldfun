@@ -31,7 +31,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
     const getBalance = async () => {
         try {
             if (!account) return;
-            const balance = await getTokenAmount(account, token.token)
+            const balance = await getTokenAmount(connector.provider,account, token.token)
             setTokenBal(balance);
         } catch {
             setTokenBal(0);

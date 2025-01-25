@@ -255,7 +255,7 @@ export const getContractBalance = async () => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getTokenAmount = async (provider: any,account: string, token: string): Promise<number> => {
+export const getTokenAmount = async (provider: any ,account: string, token: string): Promise<number> => {
     try {
         const web3 = new Web3(provider);
         const tokenContract = new web3.eth.Contract(MemecoinABI, token);
