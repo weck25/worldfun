@@ -112,11 +112,8 @@ export const buyTokens = async (provider: any, account: string, token: string, a
         const value = web3.utils.toHex(amountInWei);
 
         // check balance
-        const balance = BigInt(await web3.eth.getBalance(account));
-        if (balance < BigInt(amountInWei)) {
-            return 'Insufficient balance';
-        }
-
+        const balance = await web3.eth.getBalance(account);
+        console.log('Balance:', web3.utils.fromWei(balance, 'ether'));
         const transaction: {
             from: string;
             to: string;
@@ -137,7 +134,7 @@ export const buyTokens = async (provider: any, account: string, token: string, a
         }
         const gas = await web3.eth.estimateGas(transaction);
         transaction.gas = gas * 2n;
-
+        console.log("Estimated Gas:", gas);
         await web3.eth.sendTransaction(transaction);
         await addTokenToMetaMask(provider, token);
         return true;
