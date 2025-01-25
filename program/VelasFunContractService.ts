@@ -1,4 +1,4 @@
-import Web3 from "web3";
+import Web3, { providers } from "web3";
 import { Web3Service, Contract } from "./Web3Service";
 import VelasFunABI from '@/abi/VelasFunABI.json';
 import MemecoinABI from '@/abi/MemecoinABI.json';
@@ -255,17 +255,18 @@ export const getContractBalance = async () => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getTokenAmount = async (account: string, token: string): Promise<number> => {
+export const getTokenAmount = async (provider: any,account: string, token: string): Promise<number> => {
     try {
-        const web3 = new Web3(process.env.NEXT_PUBLIC_VELAS_PROVIDER_URL);
+        const web3 = new Web3(provider);
         const tokenContract = new web3.eth.Contract(MemecoinABI, token);
 
         const balance = await tokenContract.methods.balanceOf(account).call();
-
+        console.log(`Token balance for ${account}: ${balance}`);
         const decimals = await tokenContract.methods.decimals().call();
         const tokenAmount = web3.utils.toBigInt(balance) / (web3.utils.toBigInt(10) ** (web3.utils.toBigInt(decimals)));
         return Number(tokenAmount);
     } catch (error) {
+        console.error(`Error getting token balance for ${account}: `, error);
         console.error("Failed to get token balance: ", error);
         return 0;
     }
