@@ -111,10 +111,10 @@ export const buyTokens = async (provider: any, account: string, token: string, a
         const amountInWei = web3.utils.toWei(amount, 'ether');
         const value = web3.utils.toHex(amountInWei);
 
-        // Check the account balance
-        const balance = await web3.eth.getBalance(account);
-        if (balance.lt(amountInWei)) {
-            throw new Error('Insufficient funds');
+        // check balance
+        const balance = BigInt(await web3.eth.getBalance(account));
+        if (balance < BigInt(amountInWei)) {
+            return 'Insufficient balance';
         }
 
         const transaction: {
