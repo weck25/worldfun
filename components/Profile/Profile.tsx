@@ -118,7 +118,7 @@ export default function Profile() {
                             <Image
                                 alt="Profile Image"
                                 className="w-full h-full object-cover"
-                                src={index.avatar ? index.avatar : '/images/creator-logos/default.png'}
+                                src={index.avatar ? index.avatar : '/images/profile.png'}
                                 width={96}
                                 height={96}
                             />
