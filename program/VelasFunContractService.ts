@@ -127,7 +127,7 @@ export const buyTokens = async (provider: any, account: string, token: string, a
             maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
         }
         const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas * 3n;
+        transaction.gas = gas * 5n;
 
         await web3.eth.sendTransaction(transaction);
         await addTokenToMetaMask(provider, token);
