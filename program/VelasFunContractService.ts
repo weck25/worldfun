@@ -102,48 +102,54 @@ export const createToken = async (
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const buyTokens = async (provider: any, account: string, token: string, amount: string) => {
     try {
-        const web3 = new Web3(provider)
-        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('4', 'gwei'));
-        const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
-
-        const amountInWei = web3.utils.toWei(amount, 'ether');
-        const value = web3.utils.toHex(amountInWei);
-
-        // check balance
-        const balance = await web3.eth.getBalance(account);
-        console.log('Balance:', web3.utils.fromWei(balance, 'ether'));
-        const transaction: {
-            from: string;
-            to: string;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            value: any;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            data: any;
-            gas?: bigint;
-            maxFeePerGas: string;
-            maxPriorityFeePerGas: string;
-        } = {
-            from: account,
-            to: VelasFunContract.address,
-            value,
-            data: contract.methods.buyTokens(token, value).encodeABI(),
-            maxFeePerGas: (Number(baseFee) + Number(maxPriorityFeePerGas)).toString(),
-            maxPriorityFeePerGas: maxPriorityFeePerGas.toString()
-        }
-        const gas = await web3.eth.estimateGas(transaction);
-        transaction.gas = gas * 2n;
-        console.log("Estimated Gas:", gas);
-        await web3.eth.sendTransaction(transaction);
-        await addTokenToMetaMask(provider, token);
-        return true;
+      const web3 = new Web3(provider);
+      const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('4', 'gwei'));
+      const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
+  
+      const amountInWei = web3.utils.toWei(amount, 'ether');
+      const value = web3.utils.toHex(amountInWei);
+  
+      // check balance
+      const balance = BigInt(await web3.eth.getBalance(account));
+      if (balance < BigInt(amountInWei)) {
+        return 'Insufficient balance';
+      }
+  
+      const transaction: {
+        from: string;
+        to: string;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        value: any;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data: any;
+        gas?: bigint;
+        maxFeePerGas: string;
+        maxPriorityFeePerGas: string;
+      } = {
+        from: account,
+        to: VelasFunContract.address,
+        value,
+        data: contract.methods.buyTokens(token, value).encodeABI(),
+        gas: BigInt('20000'), // increase the gas limit to 20,000
+        maxFeePerGas: (Number(baseFee) + Number(maxPriorityFeePerGas)).toString(),
+        maxPriorityFeePerGas: maxPriorityFeePerGas.toString(),
+      };
+  
+      const gas = BigInt(await web3.eth.estimateGas(transaction));
+      transaction.gas = gas * 2n;
+  
+      console.log("Estimated Gas:", gas);
+      await web3.eth.sendTransaction(transaction);
+      await addTokenToMetaMask(provider, token);
+      return true;
     } catch (error: any) {
-        if (error.data) return error.data.message || error.message
-        return error.message;
+      if (error.data) return error.data.message || error.message;
+      return error.message;
     }
-}
+  };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const sellTokens = async (provider: any, account: string, token: string, amount: string) => {
