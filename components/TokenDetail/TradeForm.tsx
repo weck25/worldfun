@@ -120,6 +120,12 @@ export default function TradeForm({ token }: { token: coinInfo }) {
         </div>
       </div>
       <div>
+      <span>{isBuy === 2 ? (
+                    "ETH Balance: "
+                ) : (
+                    "Token Balance: "
+                )}</span>
+                <span>{isBuy === 2 ? ethBalance : tokenBal}</span>
         {isBuy === 2 ? (
           <>
             {/* <div className="flex items-center justify-between flex-wrap gap-3 pb-2">
@@ -129,12 +135,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
              
             
             <div className="mb-1.5 relative">
-            <span>{isBuy === 2 ? (
-                    "ETH Balance: "
-                ) : (
-                    "Token Balance: "
-                )}</span>
-                <span>{isBuy === 2 ? ethBalance : tokenBal}</span>
+            
               <input
                 type="number"
                 id="token"
