@@ -54,6 +54,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
         account,
         token.token
       );
+      console.log('Token balance trading:', balance);
       setTokenBal(balance);
     } catch {
       setTokenBal(0);
@@ -90,7 +91,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
     getBalance();
     getEth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connector, account, isTrading]);
+  }, [connector, account, isTrading, tokenBal]);
 
   const { metaData } = useData();
 
