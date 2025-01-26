@@ -105,7 +105,7 @@ export const createToken = async (
 export const buyTokens = async (provider: any, account: string, token: string, amount: string) => {
     try {
         const web3 = new Web3(provider)
-        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('2', 'gwei'));
+        const baseFee = (await web3.eth.getBlock()).baseFeePerGas || BigInt(web3.utils.toWei('4', 'gwei'));
         const maxPriorityFeePerGas = await web3.eth.defaultMaxPriorityFeePerGas;
 
         const transaction: {
@@ -128,16 +128,6 @@ export const buyTokens = async (provider: any, account: string, token: string, a
         }
         const gas = await web3.eth.estimateGas(transaction);
         transaction.gas = gas * 10n;
-
-        // Simulate the transaction to check for revert reasons
-        try {
-            const result = await contract.methods.buyTokens(token, web3.utils.toWei(amount, 'ether')).call({ from: account });
-            console.log('Simulation result:', result);
-        } catch (error) {
-            console.error('Transaction will revert with reason:', error);
-            throw error;
-        }
-
 
         await web3.eth.sendTransaction(transaction);
         await addTokenToMetaMask(provider, token);
