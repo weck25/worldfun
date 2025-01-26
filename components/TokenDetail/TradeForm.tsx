@@ -91,7 +91,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
     getBalance();
     getEth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connector, account, isTrading, tokenBal]);
+  }, [connector, account, isTrading, tokenBal, ethBalance]);
 
   const { metaData } = useData();
 
@@ -125,15 +125,19 @@ export default function TradeForm({ token }: { token: coinInfo }) {
             {/* <div className="flex items-center justify-between flex-wrap gap-3 pb-2">
                                 <button className="text-[10px] font-normal !leading-none text-body-color px-2 pt-1.5 pb-1 border border-primary rounded" onClick={set}>Switch to {isBuy === 2 ? token.name : 'VLX'}</button>
                             </div> */}
-            {isBuy === 2 ? (
+            
               <div className="text-sm md:text-base font-normal mb-1">
-                ETH Balance: {ethBalance}
+                {isBuy === 2 ? (
+                   <span>ETH Balance: {ethBalance}</span>
+                ) : (
+                    <span>{token.ticker} Balance: {ethBalance}</span>
+                )}
               </div>
-            ) : (
+           
               <div key="token-balance" className="text-sm md:text-base font-normal mb-1">
-                {token.ticker} Balance:  {tokenBal}
+                
               </div>
-            )}
+            
             <div className="mb-1.5 relative">
               <input
                 type="number"
