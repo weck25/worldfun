@@ -127,11 +127,12 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                             </div> */}
             
               <div className="text-sm md:text-base font-normal mb-1">
-                {isBuy === 2 ? (
-                   <span>ETH Balance: {ethBalance}</span>
+               <span>{isBuy === 2 ? (
+                    "ETH Balance: "
                 ) : (
-                    <span>{token.ticker} Balance: {ethBalance}</span>
-                )}
+                    "Token Balance: "
+                )}</span>
+                <span>{isBuy === 2 ? ethBalance : tokenBal}</span>
               </div>
             
             <div className="mb-1.5 relative">
