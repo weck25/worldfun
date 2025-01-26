@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { coinInfo } from "@/types";
 import { useEffect, useState } from "react";
-import { buyTokens, sellTokens, getTokenAmount } from "@/program/VelasFunContractService";
+import { buyTokens, sellTokens, getTokenAmount, getEthBalance } from "@/program/VelasFunContractService";
 import { hooks } from "@/connectors/metaMask";
 import { errorAlert, warningAlert } from "../ToastGroup";
 import { useWeb3React } from "@web3-react/core";
@@ -14,7 +14,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
     const [isBuy, setIsBuy] = useState<number>(2);
     const [tokenBal, setTokenBal] = useState<number>(0);
     const [isTrading, setIsTrading] = useState<boolean>(false);
-
+    const [ethBalance, setEthBalance] = useState<number>(0);
     const { useAccount } = hooks;
 
     const account = useAccount();
@@ -28,6 +28,19 @@ export default function TradeForm({ token }: { token: coinInfo }) {
         }
     }
 
+    const getEth = async () => {
+        try {
+            if (!account) return;
+            const balance = await getEthBalance(account);
+            if (balance !== undefined) {
+                setEthBalance(balance);
+            } else {
+                setEthBalance(0);
+            }
+        } catch {
+            setEthBalance(0);
+        }
+    }
     const getBalance = async () => {
         try {
             if (!account) return;
@@ -64,6 +77,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
 
     useEffect(() => {
         getBalance();
+        getEth();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [connector, account, isTrading]);
 
@@ -81,6 +95,17 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                         {/* <div className="flex items-center justify-between flex-wrap gap-3 pb-2">
                                 <button className="text-[10px] font-normal !leading-none text-body-color px-2 pt-1.5 pb-1 border border-primary rounded" onClick={set}>Switch to {isBuy === 2 ? token.name : 'VLX'}</button>
                             </div> */}
+                           {isBuy === 2 ?  
+                           <div className="columns-2">
+                                <a>ETH Amount</a>
+                                <a>Balance: {ethBalance} <strong>ETH</strong></a>
+                            </div>
+                            :
+                            <div className="columns-2">
+                                <a>{token.ticker} Amount</a>
+                                <a>Balance: {tokenBal} <strong>{token.ticker}</strong></a>
+                            </div>
+                            }
                         <div className="mb-1.5 relative">
                             <input type="number" id="token" placeholder="0.0" min="0" className="border dark:border-gray-700 border-gray-200 rounded-md placeholder:text-body-color text-[13px] sm:text-sm lg:text-base !leading-none ps-3 pe-16 sm:pe-20 py-3 w-full focus:outline-0 hide-arrows ng-valid" value={sol} onChange={handleInputChange} />
                             {isBuy === 2 ?

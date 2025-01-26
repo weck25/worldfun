@@ -254,6 +254,19 @@ export const getContractBalance = async () => {
     }
 }
 
+// get eth balance of the account
+export const getEthBalance = async (account: string): Promise<number> => {
+    try {
+        const balanceWei = await web3Service.web3.eth.getBalance(account);
+        const balanceETH = await web3Service.web3.utils.fromWei(balanceWei, 'ether');
+        return balanceETH;
+    } catch (error) {
+        console.log("error fetching balance: ", error);
+        return 0; // return a default value in case of an error
+    }
+}
+
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getTokenAmount = async (provider: any ,account: string, token: string): Promise<number> => {
     try {
