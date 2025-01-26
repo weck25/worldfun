@@ -130,8 +130,8 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                 ETH Balance: {ethBalance}
               </div>
             ) : (
-              <div className="text-sm md:text-base font-normal mb-1">
-                Token Balance:  {tokenBal}
+              <div key="token-balance" className="text-sm md:text-base font-normal mb-1">
+                {token.ticker} Balance:  {tokenBal}
               </div>
             )}
             <div className="mb-1.5 relative">
