@@ -126,16 +126,15 @@ export default function TradeForm({ token }: { token: coinInfo }) {
                                 <button className="text-[10px] font-normal !leading-none text-body-color px-2 pt-1.5 pb-1 border border-primary rounded" onClick={set}>Switch to {isBuy === 2 ? token.name : 'VLX'}</button>
                             </div> */}
             
-              <div className="text-sm md:text-base font-normal mb-1">
-               <span>{isBuy === 2 ? (
+             
+            
+            <div className="mb-1.5 relative">
+            <span>{isBuy === 2 ? (
                     "ETH Balance: "
                 ) : (
                     "Token Balance: "
                 )}</span>
                 <span>{isBuy === 2 ? ethBalance : tokenBal}</span>
-              </div>
-            
-            <div className="mb-1.5 relative">
               <input
                 type="number"
                 id="token"
