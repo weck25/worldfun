@@ -5,7 +5,7 @@ import { useSocket } from "@/contexts/SocketContext";
 import KingOfHill from "./KingOfHill";
 
 export default function TokenOverview({ token, vlxPrice }: { token: coinInfo, vlxPrice: number }) {
-    const [progress, setProgress] = useState<number>(60);
+    const [progress, setProgress] = useState<number>(0);
     const { socket } = useSocket();
     const [_token, setToken] = useState<coinInfo>(token);
 

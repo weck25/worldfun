@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useData } from "@/contexts/PageContext";
 
 const KingOfHill = ({ token, vlxPrice }: { token: coinInfo, vlxPrice: number }) => {
-    const [progress, setProgress] = useState<number>(60);
+    const [progress, setProgress] = useState<number>(0);
     const { socket } = useSocket();
     const [_token, setToken] = useState<coinInfo>(token);
 
