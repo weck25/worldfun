@@ -131,7 +131,7 @@ export default function TradeForm({ token }: { token: coinInfo }) {
               </div>
             ) : (
               <div className="text-sm md:text-base font-normal mb-1">
-                {token.ticker} Balance: {tokenBal}
+                Token Balance:  {tokenBal}
               </div>
             )}
             <div className="mb-1.5 relative">
